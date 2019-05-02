@@ -16,6 +16,7 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
+opencv2.framework/
 
 ## Other
 *.moved-aside
@@ -81,4 +82,3 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-Masters-OpenCV/opencv2.framework
