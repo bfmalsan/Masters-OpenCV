@@ -105,15 +105,30 @@
     return  [OpenCVWrapper UIImageFromCVMat:resultMatrix];
 }
 
+
+//Will do background subtraction and Canny edge detection
+bool first = false;
+cv::Mat prevFrame;
 + (UIImage *) doCanny: (UIImage *) image{
-    //blob detection
+    
     cv::Mat matrix = [OpenCVWrapper cvMatFromUIImage:image];
     
     cv::Mat gray;
     cv::cvtColor(matrix, gray, CV_BGR2GRAY);
     
+    if(first){
+        matrix.copyTo(prevFrame);
+        first = false;
+        return [OpenCVWrapper UIImageFromCVMat:prevFrame];
+    }
+    
+    //do background subtraction
+    cv::Mat backSub;
+    backSub = matrix - prevFrame;
+    matrix.copyTo(prevFrame); //set current matrix to the previousFrame
+    
     cv::Mat blur;
-    GaussianBlur(gray,blur,cv::Size(3,3),0);
+    GaussianBlur(backSub,blur,cv::Size(3,3),0);
     
     cv::Mat edges;
     Canny(blur, edges, 50, 150, 3);
